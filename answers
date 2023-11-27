@@ -1,0 +1,77 @@
+// Part A: Database – SQL 
+select *, count(EmailAddress), count(PhoneNumber) from UserDetail group by EmailAddress having count(EmailAddress) > 1 and count(PhoneNumber) > 1
+select * from UserDetail where the EmailAddress is NULL and LastSignedInTimestamp is NULL
+select FirstName, LastName from UserDetail where CreatedTimeStamp between '15.12.2022' and '07.06.2023' order by CreatedTimeStamp ASC
+select * from UserDetail where UserID in (select * from UserAccount where CreditCardExpiryDate < NOW())
+
+
+// Part B: Test Script
+All possible Testcases
+
+Verify the length of the ATM pin
+Verify the ATM is numeric
+Verify the ATM pin is correct
+
+Verify if user is not able to put pin after 3 incorrect pin attempts.
+Verify the duration till which the user is not allowed to put pin after 3 incorrect pin attempts.
+Verify incorrect pin attempt count is consecutive, if the user puts correct pin in between then the count will be again 0
+
+Verify the withdrawal amount is less than $800.
+Verify the total amount of transaction + Amount to be withdrawn should be less than $800
+
+Verify the receipt flag is true once the transaction is completed (Success or Failure)
+Verify the Account balance is visible on UI once the transaction is completed.
+Verify the Amount shown is the screen is correct (Total amount - recent transaction)
+
+
+Task 1 – Exploratory Tests 
+1. Next button should be disabled untill user fills up the mandatory fields (Medium)
+2. Password length must be atleast 6 (Severe)
+
+
+Task 2 – Automated Tests
+class ChromeTestOrikan{
+    WebDriver driver;
+    @BeforeTest
+    void setup() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    }
+ 
+    @Test
+    void checkIssuesValidAndInvalid() {
+		email_address_error_text = "//label[text()='Email Address']//parent::div/div/div"
+		email_address_text_field = "//label[text()='Password']//parent::div/input"
+		password_error_text = "//label[text()='Password']//parent::div/div/div"
+		password_error_text_field = "//label[text()='Password']//parent::div/input"
+		confirm_password_error_text = "//label[text()='Confirm Password']//parent::div/div/div"
+		confirm_password_error_text_field = "//label[text()='Confirm Password']//parent::div/input"
+
+		next_button = "//button[text()='Next']"
+		
+        driver.get("https://orikan-ui-automation-test.azurewebsites.net/");
+		
+		// Issue 1 verification
+		Assert.assertFalse(driver.findElement(By.xpath(next_button)).isDisplayed())
+		
+		driver.findElement(By.xpath(next_button)).click();
+		
+		Assert.assertTrue(driver.findElement(By.xpath(email_address_error_text)).getText() == "Email Address is required")
+		Assert.assertTrue(driver.findElement(By.xpath(password_error_text)).getText() == "Password is required.")
+		Assert.assertTrue(driver.findElement(By.xpath(confirm_password_error_text)).getText() == "Confirm Password is required.")
+		
+		
+		// Issue 2 verification
+		driver.findElement(By.xpath(password_error_text_field)).sendKeys("1")
+		Assert.assertTrue(driver.findElements(By.xpath(password_error_text)).length > 0)
+		
+    }
+ 
+    @AfterTest
+    void teardown() {
+       // Close the driver
+        driver.quit();
+    }
+ 
+}
