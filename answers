@@ -27,6 +27,14 @@ Verify the Amount shown is the screen is correct (Total amount - recent transact
 Task 1 – Exploratory Tests 
 1. Next button should be disabled untill user fills up the mandatory fields (Medium)
 2. Password length must be atleast 6 (Severe)
+3. It is not taking any other emails with alpha numeric values (severe)
+4. When going to contact option, required field error message is populating without any click action. (Medium)
+5. Field shifting should not happen when error message appears. (Medium)
+6. Special characters or blank space should not be allowed in any field. (Medium)
+7. No Validation on Card number field, CVV field, expiry year field. (Severe)
+8. Submit button should be enabled only if User aggress the aggrement. (Severe)
+9. OTP validation should be there for valid email id. (Severe)
+10. Clicking on Next button is shifting the highlight to "Contact" option even if the "Registration" screen work is not completed. (Medium)
 
 
 Task 2 – Automated Tests
